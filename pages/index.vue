@@ -1,7 +1,5 @@
 <template>
   <section class="p-8 my-8">
-    <h1>Hello world!</h1>
-
     <UInput v-model="query" placeholder="NPM Search" />
 
     <UButton @click="search">Search</UButton>
@@ -59,7 +57,7 @@ const search = async () => {
     //   }
     // })
 
-    const data = await useFetch(`/api/packageInfo?name=${item.package.name}`, {
+    const { data } = await useFetch(`/api/packageInfo?name=${item.package.name}`, {
       method: 'GET'
     })
 
