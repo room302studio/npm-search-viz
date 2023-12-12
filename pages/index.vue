@@ -1,5 +1,5 @@
 <template>
-  <section class="w-96 mx-auto my-8">
+  <section class="p-8 my-8">
     <h1>Hello world!</h1>
 
     <UInput v-model="query" placeholder="NPM Search" />
@@ -8,11 +8,18 @@
 
     <UProgress animation="carousel" v-if="searching" />
 
-    <div v-if="npmResults.length > 0">
+    <div v-if="npmResults.length > 0" class="columns columns-2">
       <!-- <pre>{{ npmResults }}</pre> -->
 
-      <div v-for="result in npmResults">
-        {{ result }}
+      <div v-for="result in npmResults" class="my-2">
+        <UCard>
+          <template #header>
+            <h3>{{ result.name }}</h3>
+          </template>
+          <p>{{ result.description }}</p>
+          <!-- <p>{{ result.metadata }}</p> -->
+          <UTable :rows="Object.entries(result.metadata)" class="text-xs" />
+        </UCard>
       </div>
     </div>
   </section>
@@ -45,16 +52,12 @@ const search = async () => {
 
   // now lets loop and get the name and description
   await Promise.all(data.value.map(async (item) => {
-    console.log('package name', item.package.name)
-
     const data = await $fetch(`/api/packageInfo`, {
       method: 'GET',
       params: {
         name: item.package.name
       }
     })
-
-    console.log(data)
 
     results.push({
       name: item.package.name,
@@ -63,7 +66,6 @@ const search = async () => {
       // item
     })
   }))
-  console.log('results', results)
   npmResults.value = results
   searching.value = false
 }
