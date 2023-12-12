@@ -12,6 +12,10 @@ export default defineNuxtConfig({
       ],
     },
   },
+  routeRules: {
+    '/**': { swr: true},
+    '/api/**': { cors: true, swr: false, cache: false },
+  },
   // ssr: false, // for netlify deploy
   // devtools: { enabled: true },
   modules: [
