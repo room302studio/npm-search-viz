@@ -23,6 +23,13 @@ const searching = ref(false)
 const query = ref('')
 const npmResults = ref([])
 
+import { onKeyStroke } from '@vueuse/core'
+
+onKeyStroke('Enter', (e) => {
+  e.preventDefault()
+  search()
+})
+
 const search = async () => {
   searching.value = true
   console.log('searching for', query.value)
@@ -37,21 +44,26 @@ const search = async () => {
   const results = []
 
   // now lets loop and get the name and description
-  data.value.forEach(async (item) => {
+  await Promise.all(data.value.map(async (item) => {
+    console.log('package name', item.package.name)
 
-    // const { data } = await $fetch(`/api/packageInfo/${item.package.name}`, {
-    //   method: 'GET',
-    // })
+    const data = await $fetch(`/api/packageInfo`, {
+      method: 'GET',
+      params: {
+        name: item.package.name
+      }
+    })
 
-    // console.log(data)
+    console.log(data)
 
     results.push({
       name: item.package.name,
       description: item.package.description,
-      // metadata: data.value
+      metadata: data
       // item
     })
-  })
+  }))
+  console.log('results', results)
   npmResults.value = results
   searching.value = false
 }
