@@ -52,11 +52,15 @@ const search = async () => {
 
   // now lets loop and get the name and description
   await Promise.all(data.value.map(async (item) => {
-    const data = await $fetch(`/api/packageInfo`, {
-      method: 'GET',
-      params: {
-        name: item.package.name
-      }
+    // const data = await $fetch(`/api/packageInfo`, {
+    //   method: 'GET',
+    //   params: {
+    //     name: item.package.name
+    //   }
+    // })
+
+    const data = await useFetch(`/api/packageInfo?name=${item.package.name}`, {
+      method: 'GET'
     })
 
     results.push({
