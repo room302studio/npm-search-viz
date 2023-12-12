@@ -12,8 +12,8 @@ export default defineNuxtConfig({
       ],
     },
   },
-  ssr: false, // for netlify deploy
-  devtools: { enabled: true },
+  // ssr: false, // for netlify deploy
+  // devtools: { enabled: true },
   modules: [
     // '@nuxtjs/supabase',
     '@vueuse/nuxt',
