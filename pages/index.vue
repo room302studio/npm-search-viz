@@ -1,23 +1,26 @@
 <template>
   <section class="p-8 my-8">
-    <UInput v-model="query" placeholder="NPM Search" />
+    <div class="flex flex-col space-y-4">
+      <UInput v-model="query" placeholder="NPM Search" />
 
-    <UButton @click="search">Search</UButton>
+      <UButton @click="search">Search</UButton>
 
-    <UProgress animation="carousel" v-if="searching" />
+      <UProgress animation="carousel" v-if="searching" />
 
-    <div v-if="npmResults.length > 0" class="columns columns-2">
-      <!-- <pre>{{ npmResults }}</pre> -->
+      <div v-if="npmResults.length > 0" class="grid grid-cols-2 gap-4">
+        <div v-for="result in npmResults" class="my-2">
+          <UCard class="flex flex-col h-full">
+            <template #header>
+              <h3>{{ result.name }}</h3>
+            </template>
+            <p>{{ result.description }}</p>
+            <!-- <p>{{ result.metadata }}</p> -->
+            <!-- add a button to hide the table by adding it to the array -->
+            <UTable :rows="Object.entries(result.metadata)" class="text-xs" />
+          </UCard>
 
-      <div v-for="result in npmResults" class="my-2">
-        <UCard>
-          <template #header>
-            <h3>{{ result.name }}</h3>
-          </template>
-          <p>{{ result.description }}</p>
-          <!-- <p>{{ result.metadata }}</p> -->
-          <UTable :rows="Object.entries(result.metadata)" class="text-xs" />
-        </UCard>
+
+        </div>
       </div>
     </div>
   </section>
@@ -29,6 +32,8 @@ const query = ref('')
 const npmResults = ref([])
 
 import { onKeyStroke } from '@vueuse/core'
+
+const resultsShowingTable = ref([])
 
 onKeyStroke('Enter', (e) => {
   e.preventDefault()
